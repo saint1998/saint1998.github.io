@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>
+    let totalRow = 1;
+    let totalPerson = 1;
+    let vat = 1;
+    let sc = 1;
+    let vat_sc = 1;
+    function insertFoodTableRow() {
+      totalRow++;
+      $("#foodTable").append(`<tr>
+            <td><input type="text" id="food-${totalRow}" /></td>
+            <td><input type="text" id="price-${totalRow}" onchange="reCalculate()"/></td>
+            <td><span id="owner-${totalRow}"></span></td>
+            <td><input type="text" id="owner-input-${totalRow}"  onchange="onChangeOwner(${totalRow})" /></td>
+        </tr>`);
+    }
+    function insertPersonTableRow() {
+      totalPerson++;
+      $("#personTable").append(`<tr>
+            <td><span id="index-${totalPerson}">${totalPerson}</span></td>
+            <td><input size="10" type="text" id="name-${totalPerson}" /></td>
+            <td><span id="pay-${totalPerson}">0</span></td>
+          </tr>`);
+    }
+    function onChangeOwner(index) {
+      let persons_index = $(`#owner-input-${index}`).val().split(",");
+      let persons_list = persons_index.map((index) =>
+        $(`#name-${index}`).val()
+      );
+      $(`#owner-${index}`).text(persons_list);
+      reCalculate();
+    }
+    function reCalculate() {
+      let totalPrice = 0;
+      $("[id^=pay-]").text(0);
+      for (let i = 1; i <= totalRow; i++) {
+        totalPrice += parseFloat($(`#price-${i}`).val());
+        let persons_index = $(`#owner-input-${i}`).val().split(",");
+        let price = parseFloat($(`#price-${i}`).val()) / persons_index.length;
+        persons_index.forEach((person) => {
+          $(`#pay-${person}`).text(
+            parseFloat($(`#pay-${person}`).text()) + price * vat_sc
+          );
+        });
+      }
+      $("#total").text(totalPrice);
+      $("#total-with-sc").text(totalPrice * sc);
+      $("#total-with-vat-sc").text(Math.round(totalPrice * vat_sc));
+      let totalPay = 0;
+      for (let i = 1; i <= totalPerson; i++) {
+        $(`#pay-${i}`).text(Math.round($(`#pay-${i}`).text()));
+        totalPay += Math.round($(`#pay-${i}`).text());
+      }
+      $("#total-pay").text(totalPay);
+    }
+    function onChangeVat() {
+      vat = parseFloat($("#vat").val()) / 100 + 1;
+      vat_sc = vat * sc;
+      reCalculate();
+    }
+    function onChangeSC() {
+      sc = parseFloat($("#SC").val()) / 100 + 1;
+      vat_sc = vat * sc;
+      reCalculate();
+    }
+  </script>
+</head>
+<html>
+  <body>
+    <label> SC : (%)</label>
+    <input size="2" type="text" id="SC" onchange="onChangeSC()" />
+    <label> VAT : (%)</label>
+    <input size="2" type="text" id="vat" onchange="onChangeVat()" />
+    <div>
+      <div width="80%" style="display: inline-block">
+        <table id="foodTable" border="1">
+          <tr>
+            <th width="25%">Food</th>
+            <th width="25%">Price</th>
+            <th width="25%">Owner</th>
+            <th width="25%">Owner input(Ex:1,2,3)</th>
+          </tr>
+          <tr>
+            <td><input type="text" id="food-1" /></td>
+            <td><input type="text" id="price-1" onchange="reCalculate()" /></td>
+            <td><span id="owner-1"></span></td>
+            <td>
+              <input
+                type="text"
+                id="owner-input-1"
+                onchange="onChangeOwner(1)"
+              />
+            </td>
+          </tr>
+        </table>
+        <button onclick="insertFoodTableRow()">+</button>
+        <span>
+          <span style="float: right">Total : <span id="total"></span> </span
+          ><br />
+          <span style="float: right"
+            >Before VAT: <span id="total-with-sc"></span> </span
+          ><br />
+          <span style="float: right"
+            >Total with SC & VAT:
+            <span id="total-with-vat-sc"></span>
+          </span>
+        </span>
+      </div>
+      <div width="20%" style="display: inline-block; float: right">
+        <table id="personTable" border="1">
+          <tr>
+            <th>Number</th>
+            <th>Name</th>
+            <th>Pay</th>
+          </tr>
+          <tr>
+            <td><span id="index-1">1</span></td>
+            <td><input size="10" type="text" id="name-1" /></td>
+            <td><span id="pay-1">0</span></td>
+          </tr>
+        </table>
+        <button onclick="insertPersonTableRow()">+</button>
+        <span style="float: right">Total : <span id="total-pay"></span> </span>
+      </div>
+    </div>
+  </body>
+</html>
