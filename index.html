@@ -69,19 +69,42 @@
 </head>
 <html>
   <body>
-    <label> SC : (%)</label>
-    <input size="2" type="text" id="SC" onchange="onChangeSC()" />
-    <label> VAT : (%)</label>
-    <input size="2" type="text" id="vat" onchange="onChangeVat()" />
+    <div style="display: inline-block">
+      <h2 style="margin: 0; color: red">Put the participants here</h2>
+      <table style="width: 100%" id="personTable" border="1">
+        <tr>
+          <th>Number</th>
+          <th>Name</th>
+          <th>Pay</th>
+        </tr>
+        <tr>
+          <td><span id="index-1">1</span></td>
+          <td><input type="text" id="name-1" /></td>
+          <td><span id="pay-1">0</span></td>
+        </tr>
+      </table>
+      <button onclick="insertPersonTableRow()">+</button>
+      <span style="float: right">Total : <span id="total-pay"></span> </span>
+    </div>
+    <!-- <div style="float: right; display: inline-block">
+      <p>How to:</p>
+    </div> -->
+    <h2 style="margin: 0; color: red">Put your bill here</h2>
+    <p style="margin: 0">
+      <label> SC : (%)</label>
+      <input size="2" type="text" id="SC" onchange="onChangeSC()" />
+      <label> VAT : (%)</label>
+      <input size="2" type="text" id="vat" onchange="onChangeVat()" />
+    </p>
     <div>
-      <div width="80%" style="display: inline-block">
+      <div style="display: inline-block">
         <table id="foodTable" border="1">
           <tr>
             <th width="25%">Food</th>
             <th width="25%">Price</th>
-            <th width="25%">Owner</th>
+            <th width="25%">Who eat this sh*t</th>
             <th width="25%">
-              Who eat this sh*t?(put number and separate with ,)
+              Who eat this sh*t?<br />(use number and separate with ',')
             </th>
           </tr>
           <tr>
@@ -109,22 +132,6 @@
             <span id="total-with-vat-sc"></span>
           </span>
         </span>
-      </div>
-      <div width="20%" style="display: inline-block; float: right">
-        <table id="personTable" border="1">
-          <tr>
-            <th>Number</th>
-            <th>Name</th>
-            <th>Pay</th>
-          </tr>
-          <tr>
-            <td><span id="index-1">1</span></td>
-            <td><input size="10" type="text" id="name-1" /></td>
-            <td><span id="pay-1">0</span></td>
-          </tr>
-        </table>
-        <button onclick="insertPersonTableRow()">+</button>
-        <span style="float: right">Total : <span id="total-pay"></span> </span>
       </div>
     </div>
   </body>
